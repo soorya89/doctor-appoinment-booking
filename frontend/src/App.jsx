@@ -13,7 +13,7 @@ function App() {
         <Route  exact path="/*" element={<Layout />}>
           <Route  element={<UserRouters />} />
         </Route>
-        <Route exact path="/admin*" element={<AdminLayout />}>
+        <Route exact path="/admin/*" element={<AdminLayout />}>
           <Route  element={<AdminRouters />} />
         </Route>
       </Routes>

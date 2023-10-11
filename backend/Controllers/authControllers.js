@@ -8,24 +8,7 @@ const generateToken =user=>{
     return jwt.sign({id:user._id,role:user.role},process.env.JWT_SECRET_KEY,
     {expiresIn:"15d"})
 }
-const checkAdminAuth = (req, res, next) => {
-  const token = req.headers.authorization.split(" ")[1];
-  console.log(token);
-  if (!token) {
-    return res.status(401).json({ message: "Unauthorized" });
-  }
-  try {
-    const decodedToken = jwt.verify(token,process.env.JWT_SECRET_KEY );
-    const isAdmin = decodedToken && decodedToken.id === "admin@gmail.com";
 
-    if (!isAdmin) {
-      return res.status(401).json({ message: "Unauthorized" });
-    }
-    next();
-  } catch (error) {
-    return res.status(401).json({ message: "Unauthorized" });
-  }
-};
 
 export const register = async (req, res) => {
     const { name, email, password, gender, role, photo } = req.body;
@@ -116,7 +99,7 @@ export const adminLogin= async(req,res)=>{
   const { email, password } = req.body;
   try {
     if (email === "admin@gmail.com" && password === "admin") {
-      const token = jwt.sign({ id: email },process.env.JWT_SECRET_KEY, { expiresIn: "30d" });
+      const token = jwt.sign({ id: email },process.env.JWT_ADMIN_SECRET_KEY, { expiresIn: "30d" });
       res.status(200).json({ auth: true, token: token, user: { email: email } });
     } else {
       res.status(401).json({ auth: false, message: "Invalid admin credentials" });

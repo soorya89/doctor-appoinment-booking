@@ -1,9 +1,15 @@
 import {useState} from 'react'
-import {Link} from 'react-router-dom'
+import {Link, useNavigate} from 'react-router-dom'
+import uploadImageToCloudinary from '../../utils/uploadCloudinary';
+import { BASE_URL } from '../../config';
+import {toast} from 'react-toastify'
+import HashLoader from 'react-spinners/HashLoader'
+
 
 function Signup() {
-  const [selectedFile,setSelectesFile] =useState(null)
-  const [previewURL,setPreviewURL] =useState(null)
+  const [selectedFile,setSelectedFile] =useState(null)
+  const [previewURL,setPreviewURL] =useState('')
+  const [loading,setLoading] = useState(false)
   const [formData,setFormData] = useState({
     name:'',
     email:'',
@@ -12,16 +18,51 @@ function Signup() {
     role:'patient',
     gender:''
   })
-  const handleInputChange= async(e)=>{
+  const navigate=useNavigate()
+  const handleInputChange= async e =>{
     setFormData({...formData,[e.target.name]: e.target.value})
   }
-  const handleFileChange=(e)=>{
-    const file=e.target.files(0)
 
-    console.log(file);
+  const handleFileChange= async e =>{
+    const file=e.target.files[0]
+    const data = await uploadImageToCloudinary(file) 
+
+    setPreviewURL(data.url)
+    setSelectedFile(data.url)
+    setFormData({...formData, photo: data.url})
   }
-  const submitHandler =async (e)=>
-  e.preventDefault()
+
+ 
+
+  const submitHandler = async (e) => {
+    e.preventDefault();
+    setLoading(true)
+    try{
+      const res= await fetch(`${BASE_URL}/auth/register`,{
+        method:'post',
+        headers:{
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      })
+      const {message} =await res.json()
+
+      if(!res.ok){
+        throw new Error(message)
+      }
+      setLoading(false)
+      toast.success(message)
+      navigate('/login')
+      
+    }catch(err){
+      toast.error(err.message)
+      setLoading(false)
+    }
+  };
+     
+  
+  
+  
   return (
     <section className="px-5 lg:px-0">
       <div className='w-full max-w-[570px] mx-auto round-lg shadow-md md:p-10'>
@@ -47,7 +88,7 @@ function Signup() {
          name='email' 
          value={formData.email} 
           onChange={handleInputChange}
-          
+          autoComplete='off'
          className='w-full  py-3 border-b border-solid border-[#0066ff1] 
          focus:outline-none focus:border-b-primaryColor text-[16px] leadind-7 
          text-textColor placeholder:text-[#6A7D93]  cursor-pointer' required />
@@ -59,7 +100,7 @@ function Signup() {
          name='password' 
          value={formData.password} 
           onChange={handleInputChange} 
-          
+          autoComplete='off'
          className='w-full  py-3 border-b border-solid border-[#0066ff1] 
          focus:outline-none focus:border-b-primaryColor text-[16px] leadind-7 
          text-textColor placeholder:text-[#6A7D93]  cursor-pointer' required />
@@ -69,7 +110,7 @@ function Signup() {
           Are you a:
           <select name='role'
           value={formData.role} 
-          onChange={handleInputChange}
+          
            className='text-textColor font-semibold text-[15px] leading-7 px-4 py-3 focus:outline-none'>
             <option value="patient">Patient</option>
             <option value="doctor">Doctor</option>
@@ -90,9 +131,10 @@ function Signup() {
       </div>
 
       <div className='mb-5 flex items-center gap-3'>
-        <figure className='w-[60px] h-[60px] rounded-full border-2 border-solid border-primaryColor flex items-center justify-center'>
-          <img alt='' src='' className='w-full rounded-full'/>
-        </figure>
+        {selectedFile && <figure 
+        className='w-[60px] h-[60px] rounded-full border-2 border-solid border-primaryColor flex items-center justify-center'>
+          <img alt='' src={previewURL} className='w-full rounded-full'/>
+        </figure>}
         <div className='relative w-[130px] h-[50px]'>
           <input type='file'
           name='photo'
@@ -106,7 +148,12 @@ function Signup() {
         </div>
       </div>
       <div className='mt-7'>
-        <button type='sbmit' className='w-full bg-primaryColor text-white text-[18px] leading-[30px] rounded-lg'>Sign Up</button>
+        <button 
+        disabled={loading && true} 
+        type='sbmit' 
+        className='w-full bg-primaryColor text-white text-[18px] leading-[30px] rounded-lg'>
+          {loading ? <HashLoader size={35} color='fffff' /> :'Sign Up'}
+          </button>
       </div>
 
       <p className='mt-5 text-textColor text-center'>Already have an account? 
@@ -114,6 +161,7 @@ function Signup() {
       </p>
           </form>
       </div>
+      
     </section>
   )
 }

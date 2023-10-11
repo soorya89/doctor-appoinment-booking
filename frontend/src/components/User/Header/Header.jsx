@@ -1,7 +1,8 @@
-import {useEffect,useRef} from 'react'
+import {useEffect,useRef,useContext} from 'react'
 import logo from '../../../assets/images/logo.png'
 import {NavLink,Link} from 'react-router-dom'
 import {BiMenu} from 'react-icons/bi'
+import { authContext } from '../../../context/AuthContext'
 
 const navLinks=[
   {
@@ -20,6 +21,7 @@ const navLinks=[
 const Header = () => {
   const headerRef = useRef(null)
   const menuRef = useRef(null)
+  const {user,role,token} = useContext(authContext)
 
   const handleStickyHeader = ()=>{
     if(document.body.scrollTop >80 || document.documentElement.scrollTop > 80){
@@ -58,14 +60,17 @@ const Header = () => {
                 </div>
 
                 <div className='flex items-center gap-4'>
-                    <div className='hidden'>
-                      <Link to='/'>
-                      <p className='text-textColor text-[16px] leading-7 font[500]'>Soorya</p>
-                      </Link>
-                    </div>
-                    <Link to='/login'>
-                      <p className='text-primaryColor font-[600]'>Login</p>
+                  {
+                    token && user ? (<div>
+                    <Link to={`${role==='doctor'? '/doctor/profile': '/user/profile'}`}>
+                    <p className='text-textColor text-[16px] leading-7 font[500]'>{user?.name}</p>
                     </Link>
+                  </div>) :   (<Link to='/login'>
+                      <p className='text-primaryColor font-[600]'>Login</p>
+                    </Link>)
+                  }
+                    
+                  
                     <span className='md:hidden' onClick={toggleMenu}>
                       <BiMenu className='w-6 h-6 cursor-pointer'/>
                     </span>
