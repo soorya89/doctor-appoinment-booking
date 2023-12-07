@@ -11,6 +11,7 @@ import service05 from '../../assets/images/service05.png'
 import service06 from '../../assets/images/service06.png'
 import {BsArrowRight} from 'react-icons/bs'
 import {Link} from 'react-router-dom'
+import ServiceList from '../../components/User/Services/ServiceList'
 
 function Home() {
   return (
@@ -58,7 +59,7 @@ function Home() {
       </section>
       {/* =======hero section end====== */}
 
-      <section>
+      <section style={{paddingBottom:0}}>
         <div className="container">
           <div className='lg:w-[470px] mx-auto'>
             <h2 className='heading text-center'>Providing the best medical services</h2>           
@@ -77,85 +78,12 @@ function Home() {
       
       
       {/* =======services section ====== */}
-      <section>
+      <section style={{paddingBottom:0}}>
         <div className='container bg-[#E0F4FF]'>
           <div className='xl:w-[470px] mx-auto'>
             <h2 className='heading text-center'>our services</h2>
           </div>
-          <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 lg:gap-[30px] mt-[30px] lg:mt-[55px]'>
-            <div className='py-5 px-4 flex items-center justify-between'> 
-              <div className='w-1/3'>
-                <img src={service01} alt=''/>
-              </div>
-
-              <div className='w-2/3'>
-                <h2 className='text-2xl font-[700] text-blueColor'>NEUROLOGY</h2>
-                <p className='text-[16px] leading-7 text-blueColor font-[400] mt-2 '>World class care for Our health System offers unmatched expert health care.</p>
-              </div>
-              {/* <div className='flex items-center jusstify-between mt-[30px]'>
-              <Link to='' className='w-[44px] mt-[30px] mx-auto flex items-center justify-center text-blueColor ' >
-                <BsArrowRight />
-              </Link>
-              </div> */}
-            </div>
-
-            <div className='py-5 px-4 flex items-center justify-between'> 
-              <div className='w-1/3'>
-                <img src={service02} alt=''/>
-              </div>
-
-              <div className='w-2/3'>
-                <h2 className='text-2xl font-[700] text-blueColor'>CARDIOLOGY</h2>
-                <p className='text-[16px] leading-7 text-blueColor font-[400] mt-2 '>World class care for Our health System offers unmatched expert health care.</p>
-              </div>
-            </div>
-
-            <div className='py-5 px-4 flex items-center justify-between'> 
-              <div className='w-1/3'>
-                <img src={service03} alt=''/>
-              </div>
-
-              <div className='w-2/3'>
-                <h2 className='text-2xl font-[700] text-blueColor'>ENT</h2>
-                <p className='text-[16px] leading-7 text-blueColor font-[400] mt-2 '>World class care for Our health System offers unmatched expert health care.</p>
-              </div>
-            </div>
-          </div>
-
-          <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 lg:gap-[30px] mt-[30px] lg:mt-[55px]'>
-            <div className='py-5 px-4 flex items-center justify-between'> 
-              <div className='w-1/3'>
-                <img src={service04} alt=''/>
-              </div>
-
-              <div className='w-2/3'>
-                <h2 className='text-2xl font-[700] text-blueColor'>PEDIATRICIAN</h2>
-                <p className='text-[16px] leading-7 text-blueColor font-[400] mt-2 '>World class care for Our health System offers unmatched expert health care.</p>
-              </div>
-            </div>
-
-            <div className='py-5 px-4 flex items-center justify-between'> 
-              <div className='w-1/3'>
-                <img src={service05} alt=''/>
-              </div>
-
-              <div className='w-2/3'>
-                <h2 className='text-2xl font-[700] text-blueColor'>CARDIOLOGY</h2>
-                <p className='text-[16px] leading-7 text-blueColor font-[400] mt-2 '>World class care for Our health System offers unmatched expert health care.</p>
-              </div>
-            </div>
-
-            <div className='py-5 px-4 flex items-center justify-between'> 
-              <div className='w-1/3'>
-                <img src={service06} alt=''/>
-              </div>
-
-              <div className='w-2/3'>
-                <h2 className='text-2xl font-[700] text-blueColor'>ENT</h2>
-                <p className='text-[16px] leading-7 text-blueColor font-[400] mt-2 '>World class care for Our health System offers unmatched expert health care.</p>
-              </div>
-            </div>
-          </div>
+          <ServiceList />
         </div>
       </section>
       {/* =======services section end====== */}

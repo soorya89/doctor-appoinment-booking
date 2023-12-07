@@ -4,6 +4,10 @@
 
 
 @layer base{
+  body{
+    background: rgb(164,243,248);
+    background: linear-gradient(180deg, rgba(164,243,248,1) 0%, rgba(108,202,255,1) 0%, rgba(116,235,242,0.011642156862745057) 53%);
+  }
   section{
     @apply py-[75px] 
   }

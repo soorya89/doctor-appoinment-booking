@@ -38,7 +38,7 @@ export const register = async (req, res) => {
           password:hashPassword,
           photo,
           gender,
-          role,
+          role
         });
       } else if (role === 'doctor') {
         user = new Doctor({
@@ -47,7 +47,7 @@ export const register = async (req, res) => {
           password:hashPassword,
           photo,
           gender,
-          role,
+          role
         });
       }
   
@@ -99,7 +99,7 @@ export const adminLogin= async(req,res)=>{
   const { email, password } = req.body;
   try {
     if (email === "admin@gmail.com" && password === "admin") {
-      const token = jwt.sign({ id: email },process.env.JWT_ADMIN_SECRET_KEY, { expiresIn: "30d" });
+      const token = jwt.sign({ id: email },process.env.JWT_ADMIN_SECRET_KEY, { expiresIn: "15d" });
       res.status(200).json({ auth: true, token: token, user: { email: email } });
     } else {
       res.status(401).json({ auth: false, message: "Invalid admin credentials" });
