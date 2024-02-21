@@ -1,7 +1,10 @@
 import {useState} from 'react'
 import signupImg from '../assets/images/signup.gif'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import HashLoader from 'react-spinners/HashLoader'
+import uploadImageToCloudinary from '../utils/uploadCloudinary'
+import {BASE_URL} from '../config'
+import {toast} from 'react-toastify'
 
 const Signup = () => {
   const [selectedFile,setSelectedFile] =useState(null)
@@ -15,15 +18,40 @@ const Signup = () => {
     role:'patient',
     gender:''
   })
+  const navigate=useNavigate()
   const handleInputChange= async e =>{
     setFormData({...formData,[e.target.name]: e.target.value})
   }
   const handleFileChange= async e =>{
     const file=e.target.files[0]
-    console.log(file);
+    const data=await uploadImageToCloudinary(file)
+    setPreviewURL(data.url)
+    setSelectedFile(data.url)
+    setFormData({...formData,photo:data.url})
   }
 const submitHandler= async e=>{
+  
   e.preventDefault()
+  setLoading(true)
+  try{
+    const res=await fetch(`${BASE_URL}/auth/register`,{
+      method:'post',
+      headers:{
+        'content-type':'application/json'
+      },
+      body:JSON.stringify(formData)
+    })
+    const {message} =await res.json()
+    if(!res.ok){
+      throw new Error(message)
+    }
+    setLoading(false)
+    toast.success(message)
+    navigate('/login')
+  }catch(err){
+    toast.error(err.message)
+    setLoading(false)
+  }
 }
   return (
     <section className="px-5 lg:px-0">
@@ -79,7 +107,7 @@ const submitHandler= async e=>{
           Are you a:
           <select name='role'
           value={formData.role} 
-          
+          onChange={handleInputChange}
            className='text-textColor font-semibold text-[15px] leading-7 px-4 py-3 focus:outline-none'>
             <option value="patient">Patient</option>
             <option value="doctor">Doctor</option>
@@ -100,10 +128,10 @@ const submitHandler= async e=>{
       </div>
 
       <div className='mb-5 flex items-center gap-3'>
-        {selectedFile && <figure 
+        {selectedFile && (<figure 
         className='w-[60px] h-[60px] rounded-full border-2 border-solid border-primaryColor flex items-center justify-center'>
           <img alt='' src={previewURL} className='w-full rounded-full'/>
-        </figure>}
+        </figure>)}
         <div className='relative w-[130px] h-[50px]'>
           <input type='file'
           name='photo'
