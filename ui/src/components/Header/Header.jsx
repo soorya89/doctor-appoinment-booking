@@ -1,8 +1,8 @@
-import {useEffect,useRef} from 'react'
+import {useEffect,useRef,useContext} from 'react'
 import logo from '../../assets/images/logo.png'
-import userImg from '../../assets/images/avatar-icon.png'
 import {BiMenu} from 'react-icons/bi'
-import {NavLink,Link} from 'react-router-dom'
+import {NavLink,Link,useNavigate} from 'react-router-dom'
+import {authContext} from '../../context/AuthContext'
 
 const navLinks=[
   {
@@ -26,7 +26,9 @@ const navLinks=[
 const Header = () => {
   const headerRef = useRef(null)
   const menuRef = useRef(null)
-
+  const {user, role, token}=useContext(authContext)
+  const { dispatch } = useContext(authContext);
+  const navigate=useNavigate()
   const handleStickyHeader = ()=>{
     if(document.body.scrollTop >80 || document.documentElement.scrollTop > 80){
       headerRef.current.classList.add('sticky__header')
@@ -34,6 +36,13 @@ const Header = () => {
       headerRef.current.classList.remove('sticky__header')
     }
   }
+  const handleLogout=()=>{
+ 
+    dispatch({type:'LOGOUT',payload:{ user:null,
+      role:null,
+      token:null}})
+    navigate('/login')
+   }
   useEffect(()=>{
     handleStickyHeader()
 
@@ -62,17 +71,22 @@ const Header = () => {
         </div>
         {/* ======== menu======*/}
         <div className='flex items-center gap-4'>
-          <div className='hidden'>
-            <Link to='/'>
-              <figure className='w-[35ps] h-[35px] rounded-full cursor-pointer'>
-               <img className='w-full rounded-full'src={userImg} alt="" /> 
-              </figure>
+          {token && user ? ( <div className='flex items-center' >
+            <Link to={`${role=== 'doctor' ? '/doctor/profile/me' : '/user/profile/me'}`}>
+              {/* <figure className='w-[35ps] h-[35px] rounded-full cursor-pointer'>
+               <img className='w-full rounded-full'src={user?.photo} alt="" /> 
+              </figure> */}
+              <h1 >{user?.name}</h1>
             </Link>
-          </div>
-
-          <Link to='/login'>
+            <h1 onClick={handleLogout} className='text-textColor text-[16px] font-bold ml-2 cursor-pointer'>Logout</h1>
+          </div>):    
+         ( <Link to='/login'>
       <p className='text-primaryColor font-[600]'>Login</p>
-    </Link>
+      
+    </Link>)
+          }
+         
+       
 
     <span className='md:hidden' onClick={toggleMenu}>
        <BiMenu className='w-6 h-6 cursor-pointer'/>
