@@ -5,7 +5,7 @@ import Booking from '../models/BookingSchema.js'
 export const updateDoctor = async (req,res)=>{
     const id=req.params.id
     try{
-        const updatedDoctor = await Doctor.findByIdAnsUpdate(id, {$set:req.body},{new:true})
+        const updatedDoctor = await Doctor.findByIdAndUpdate(id, {$set:req.body},{new:true})
         res.status(200).json({success:true , message:"Successfully Updted",data:updatedDoctor})
     }catch(err){
         res.status(500).json({success:false , message:"Failed to Update"}) 
@@ -15,7 +15,7 @@ export const updateDoctor = async (req,res)=>{
 export const deleteDoctor = async (req,res)=>{
     const id=req.params.id
     try{
-        const deletedDoctor = await Doctor.findByIdAnsDelete(id, {$set:req.body},{new:true})
+        const deletedDoctor = await Doctor.findByIdAndDelete(id, {$set:req.body},{new:true})
         res.status(200).json({success:true , message:"Successfully Deleted"})
     }catch(err){
         res.status(500).json({success:false , message:"Failed to deletete"}) 
@@ -60,8 +60,8 @@ export const getDoctorProfile= async (req,res)=>{
             return res.status(404).json({success:false,message:"Doctor not found"})
         }
         const {password,...rest} = doctor._doc
-        const appoinments = await Booking.find({doctor:doctorId})
-        return res.status(200).json({success:true,message:'Profile info is getting',data:{...rest,appoinments}})
+        const appointments = await Booking.find({doctor:doctorId})
+        return res.status(200).json({success:true,message:'Profile info is getting',data:{...rest,appointments}})
     }catch(err){
         res.status(500).json({success:false , message:"Something went wrong, cannot get"})
     }
