@@ -52,7 +52,7 @@ await Doctor.findByIdAndUpdate(doctorId, {
 }
 
 reviewSchema.post('save',function(){
-  this.constructor.calcAverageRating(this.doctor)
+  this.constructor.calcAverageRatings(this.doctor)
 })
 
 

@@ -13,6 +13,14 @@ const UserSchema = new mongoose.Schema({
   },
   gender: { type: String, enum: ["male", "female", "other"] },
   bloodType: { type: String },
+ 
+    address: { type: String },
+    street: { type: String },
+    city: { type: String },
+    state: { type: String },
+    zip: { type: String },
+    country: { type: String },
+ 
   appointments: [{ type: mongoose.Types.ObjectId, ref: "Appointment" }],
 });
 

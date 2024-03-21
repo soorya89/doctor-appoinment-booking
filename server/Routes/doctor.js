@@ -1,5 +1,5 @@
 import express from 'express'
-import {deleteDoctor, getAllDoctor,getDoctorProfile,getSingleDoctor, updateDoctor} from '../Controllers/doctorontroller.js'
+import {deleteDoctor, getAllDoctor,getDoctorProfile,getSingleDoctor, updateDoctor} from '../Controllers/doctorController.js'
 import {authenticate,restrict} from '../auth/verifyToken.js'
 import reviewRouter from './review.js'
 
