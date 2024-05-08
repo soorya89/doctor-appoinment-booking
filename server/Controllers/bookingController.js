@@ -4,6 +4,7 @@ import Booking from '../models/BookingSchema.js'
 import Stripe from 'stripe'
 
 
+
 export const getCheckoutSession = async(req,res)=>{
     
     try{
@@ -43,11 +44,12 @@ export const getCheckoutSession = async(req,res)=>{
             ]
         })
 
+
         const booking = new Booking({
             doctor:doctor._id,
             user:user._id,
             ticketPrice:doctor.ticketPrice,
-            session:session.id
+            paymentId:session.id
         })
 
         await booking.save()
